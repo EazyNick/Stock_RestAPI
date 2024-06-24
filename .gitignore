@@ -1,0 +1,23 @@
+# Python 관련 무시 파일
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Ignore access_token.json
+/Auth/access_token/access_token.json
+
+# 환경 변수 파일 무시
+*.env
+
+# 기타 무시 파일
+*.log
+*.sqlite3
+.DS_Store
+*.bak
