@@ -1,0 +1,4 @@
+[2024-06-23 18:59:24.186][D][Logger.py(_init_logger):49] Logger initialized
+[2024-06-23 18:59:24.186][D][Logger.py(clean_up_logs):64] clean_up_logs
+[2024-06-23 18:59:24.597][I][mainrun.py(Run):42] Start MainRun
+[2024-06-23 18:59:25.034][I][get_price.py(get_price):38] 현재가: 80000

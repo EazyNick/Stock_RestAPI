@@ -1,0 +1,4 @@
+[2024-06-23 19:08:30.322][D][Logger.py(_init_logger):49] Logger initialized
+[2024-06-23 19:08:30.323][D][Logger.py(clean_up_logs):64] clean_up_logs
+[2024-06-23 19:08:30.742][I][manage.py(run_my_function):31] START MAINFUN
+[2024-06-23 19:08:30.744][I][mainrun.py(Run):42] Start MainRun

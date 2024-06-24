@@ -1,0 +1,5 @@
+[2024-06-23 18:59:47.072][D][Logger.py(_init_logger):49] Logger initialized
+[2024-06-23 18:59:47.073][D][Logger.py(clean_up_logs):64] clean_up_logs
+[2024-06-23 18:59:47.409][I][manage.py(run_my_function):31] START MAINFUN
+[2024-06-23 18:59:47.424][I][mainrun.py(Run):42] Start MainRun
+[2024-06-23 18:59:47.768][E][access_token.py(get_access_token):58] Failed to retrieve access token: 403, {"error_description":"접근토큰 발급 잠시 후 다시 시도하세요(1분당 1회)","error_code":"EGW00133"}
