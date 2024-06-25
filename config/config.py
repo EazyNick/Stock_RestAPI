@@ -45,8 +45,14 @@ class Config:
             return f"{Config.Base.get_url_base()}/uapi/domestic-stock/v1/trading/order-cash"
 
         @classmethod
-        def get_headers(cls):
-            return Config.Base.get_headers()
+        def get_headers(cls, access_token, app_key, app_secret):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": f"Bearer {access_token}",
+                "appkey": app_key,
+                "appsecret": app_secret,
+                "tr_id": "VTTC0802U"
+            }
 
         @classmethod
         def get_path(cls):
@@ -66,8 +72,14 @@ class Config:
             return f"{Config.Base.get_url_base()}/sell_endpoint"
 
         @classmethod
-        def get_headers(cls):
-            return Config.Base.get_headers()
+        def get_headers(cls, access_token, app_key, app_secret):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": f"Bearer {access_token}",
+                "appkey": app_key,
+                "appsecret": app_secret,
+                "tr_id": "VTTC0801U"
+            }
 
         @classmethod
         def get_path(cls):

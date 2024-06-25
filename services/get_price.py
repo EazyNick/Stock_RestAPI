@@ -29,16 +29,18 @@ def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     params = Config.Stock.get_params(div_code, itm_no)
 
     res = requests.get(url, headers=headers, params=params)
-    
-    if res.status_code == 200:
-        data = res.json()
-        # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
-        stck_prpr = data['output'].get('stck_prpr')
-        if stck_prpr:
-            log_manager.logger.info(f"현재가: {stck_prpr}")
-            return stck_prpr
+    try:
+        if res.status_code == 200:
+            data = res.json()
+            # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
+            stck_prpr = data['output'].get('stck_prpr')
+            if stck_prpr:
+                log_manager.logger.info(f"현재가: {stck_prpr}")
+                return stck_prpr
+            else:
+                log_manager.logger.error("Failed to retrieve 현재가: 'stck_prpr' not found in response.")
         else:
-            log_manager.logger.error("Failed to retrieve 현재가: 'stck_prpr' not found in response.")
-    else:
-        log_manager.logger.error(f"Failed to retrieve stock data: {res.status_code}")
-    return None
+            log_manager.logger.error(f"Failed to retrieve stock data: {res.status_code}")
+        return None
+    except:
+        log_manager.logger.error(f"{data}")

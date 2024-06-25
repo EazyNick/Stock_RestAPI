@@ -30,7 +30,7 @@ class AccessTokenManager:
             self.file_path = os.path.join(PATH, 'access_token.json')
         else:
             self.file_path = file_path
-        self.clear_access_token_file()
+        # self.clear_access_token_file()
         self.__initialized = True
 
     def get_access_token(self):

@@ -27,7 +27,8 @@ def get_access_token(manager):
         str: 성공적으로 가져온 액세스 토큰
     """
     if Config.Base.get_flag() == 0:
-        access_token = manager.get_access_token()  # get_access_token 메서드 호출하여 access_token 가져오기
+        # access_token = manager.get_access_token()  # get_access_token 메서드 호출하여 access_token 가져오기
+        access_token = manager.load_access_token()
         Config.Base.increment_flag()
     else:
         access_token = manager.load_access_token()
