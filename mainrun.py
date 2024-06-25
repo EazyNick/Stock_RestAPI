@@ -51,6 +51,22 @@ def Run():
     stck_prpr = get_price(access_token, app_key, app_secret)
     if stck_prpr:
         log_manager.logger.info(f"현재가: {stck_prpr}")
+    else:
+        log_manager.logger.error(f"현재가 불러오기 실패")
+
+    buy_data = buy_stock(access_token, app_key, app_secret)
+    if buy_data:
+        log_manager.logger.info(f"주식 매수: {buy_data}")
+    else:
+        log_manager.logger.error(f"매수 실패")
+
+    # sell_data = sell_stock(access_token, app_key, app_secret)
+
+    # if buy_data:
+    #     log_manager.logger.info(f"주식 매도: {sell_data}")
+    # else:
+    #     log_manager.logger.error(f"매도 실패")
+
 
 if __name__ == "__main__":
     for i in range(10):

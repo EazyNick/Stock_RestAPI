@@ -2,7 +2,7 @@ import json
 import os
 import requests
 import sys
-from app_key import KeyringManager
+from .app_key import KeyringManager
 
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))

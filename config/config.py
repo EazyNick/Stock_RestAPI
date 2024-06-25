@@ -1,6 +1,6 @@
 # config/config.py
 
-class Config:
+class Config:   
     class Base:
         __flag = 0  # access token 1회 발급 flag
         _url_base = "https://openapivts.koreainvestment.com:29443"
@@ -42,7 +42,7 @@ class Config:
     class Buy:
         @classmethod
         def get_url(cls):
-            return f"{Config.Base.get_url_base()}/buy_endpoint"
+            return f"{Config.Base.get_url_base()}/uapi/domestic-stock/v1/trading/order-cash"
 
         @classmethod
         def get_headers(cls):

@@ -1,6 +1,6 @@
 import os
 import sys
-from load_env import load_env_file
+from .load_env import load_env_file
 import keyring
 
 try:
