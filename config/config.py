@@ -6,6 +6,8 @@ class Config:
         _url_base = "https://openapivts.koreainvestment.com:29443"
         _headers = {"content-type": "application/json"}
         _path = "oauth2/tokenP"
+        _CANO = "50112202"
+        _ACNT_PRDT_CD = "01"
 
         @classmethod
         def get_url_base(cls):
@@ -30,6 +32,22 @@ class Config:
         @classmethod
         def set_path(cls, value):
             cls._path = value
+
+        @classmethod
+        def get_CANO(cls):
+            return cls._CANO
+
+        @classmethod
+        def set_CANO(cls, value):
+            cls._CANO = value
+
+        @classmethod
+        def get_ACNT_PRDT_CD(cls):
+            return cls._ACNT_PRDT_CD
+
+        @classmethod
+        def set_ACNT_PRDT_CD(cls, value):
+            cls._ACNT_PRDT_CD = value
 
         @classmethod
         def get_flag(cls):
@@ -69,7 +87,7 @@ class Config:
     class Sell:
         @classmethod
         def get_url(cls):
-            return f"{Config.Base.get_url_base()}/sell_endpoint"
+            return f"{Config.Base.get_url_base()}/uapi/domestic-stock/v1/trading/order-cash"
 
         @classmethod
         def get_headers(cls, access_token, app_key, app_secret):

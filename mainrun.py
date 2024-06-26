@@ -61,12 +61,12 @@ def Run():
     else:
         log_manager.logger.error(f"매수 실패")
 
-    # sell_data = sell_stock(access_token, app_key, app_secret)
+    sell_data = sell_stock(access_token, app_key, app_secret)
 
-    # if buy_data:
-    #     log_manager.logger.info(f"주식 매도: {sell_data}")
-    # else:
-    #     log_manager.logger.error(f"매도 실패")
+    if sell_data:
+        log_manager.logger.info(f"주식 매도: {sell_data}")
+    else:
+        log_manager.logger.error(f"매도 실패")
 
 
 if __name__ == "__main__":

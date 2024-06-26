@@ -1,16 +1,21 @@
 import requests
 import sys
 import os
+import json
 
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
     from config.config import Config
     from utils import *
+    from Auth import *
+    from services import *
 except ImportError:    
-    from config import Config
+    from config.config import Config
     from utils import *
+    from Auth import *
+    from services import *
 
-def sell_stock(access_token, app_key, app_secret, div_code="J", itm_no="005930", qty=1):
+def sell_stock(access_token, app_key, app_secret, div_code="J", itm_no="005930", qty='1'):
     """
     주식 API를 호출하여 매도하는 함수
 
@@ -25,18 +30,25 @@ def sell_stock(access_token, app_key, app_secret, div_code="J", itm_no="005930",
     Returns:
         dict: 매도 결과 또는 None
     """
-    url = f"{Config.Base.get_url_base()}/uapi/domestic-stock/v1/trading/order-stock"
-    headers = Config.Stock.get_headers(access_token, app_key, app_secret)
+    url = Config.Sell.get_url()
+    headers = Config.Sell.get_headers(access_token, app_key, app_secret)
+    cano = Config.Base.get_CANO()
+    acnt_prdt_cd = Config.Base.get_ACNT_PRDT_CD()
+
     data = {
-        "FID_COND_MRKT_DIV_CODE": div_code,
-        "FID_INPUT_ISCD": itm_no,
-        "ORDR_COND": "00",  # 매도 주문 조건 (지정가 주문, 시장가 주문 등)
-        "ORDR_PRC": "0",  # 매도 가격 (0일 경우 시장가 주문)
-        "ORDR_QTY": qty   # 매도 수량
+        "CANO": cano,  # 종합계좌번호 (체계 8-2의 앞 8자리)
+        "ACNT_PRDT_CD": acnt_prdt_cd,  # 계좌상품코드 (체계 8-2의 뒤 2자리)
+        "PDNO": itm_no,  # 종목코드 (6자리) 
+        "ORD_DVSN": "00",  # 주문구분 (지정가: 00)
+        "ORD_QTY": qty,  # 주문수량
+        "ORD_UNPR": "90000"  # 매수 가격 (0일 경우 시장가 주문)
     }
 
-    res = requests.post(url, headers=headers, data=data)
+    res = requests.post(url, headers=headers, data=json.dumps(data))
     
+    log_manager.logger.debug(f"Status Code: {res.status_code}")
+    log_manager.logger.debug(f"Response: {res.text}")
+
     if res.status_code == 200:
         data = res.json()
         # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
@@ -48,3 +60,12 @@ def sell_stock(access_token, app_key, app_secret, div_code="J", itm_no="005930",
     else:
         log_manager.logger.error(f"Failed to sell stock: {res.status_code}")
     return None
+
+if __name__ == "__main__":
+    manager = AccessTokenManager()
+    access_token = manager.load_access_token()
+    key = KeyringManager()
+    app_key = key.app_key
+    app_secret = key.app_secret_key
+    result = sell_stock(access_token, app_key, app_secret)
+    print(result)
