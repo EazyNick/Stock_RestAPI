@@ -15,7 +15,7 @@ except ImportError:
     from Auth import *
     from services import *
 
-def sell_stock(access_token, app_key, app_secret, div_code="J", itm_no="005930", qty='1'):
+def sell_stock(access_token, app_key, app_secret, ORD_UNPR, itm_no="005930", qty='1'):
     """
     주식 API를 호출하여 매도하는 함수
 
@@ -23,13 +23,14 @@ def sell_stock(access_token, app_key, app_secret, div_code="J", itm_no="005930",
         access_token (str): 액세스 토큰
         app_key (str): 애플리케이션 키
         app_secret (str): 애플리케이션 시크릿 키
-        div_code (str): 시장 분류 코드 (기본값: "J")
+        ORD_UNPR (str): 매수 금액
         itm_no (str): 종목번호 (기본값: "005930")
         qty (int): 매도할 수량 (기본값: 1)
 
     Returns:
         dict: 매도 결과 또는 None
     """
+    
     url = Config.Sell.get_url()
     headers = Config.Sell.get_headers(access_token, app_key, app_secret)
     cano = Config.Base.get_CANO()
@@ -41,7 +42,7 @@ def sell_stock(access_token, app_key, app_secret, div_code="J", itm_no="005930",
         "PDNO": itm_no,  # 종목코드 (6자리) 
         "ORD_DVSN": "00",  # 주문구분 (지정가: 00)
         "ORD_QTY": qty,  # 주문수량
-        "ORD_UNPR": "90000"  # 매수 가격 (0일 경우 시장가 주문)
+        "ORD_UNPR": ORD_UNPR  # 매수 가격 (0일 경우 시장가 주문)
     }
 
     res = requests.post(url, headers=headers, data=json.dumps(data))

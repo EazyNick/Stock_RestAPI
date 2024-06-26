@@ -24,6 +24,7 @@ def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     Returns:
         str: 현재가 (주식 가격) 또는 None
     """
+    
     url = Config.Stock.get_url()
     headers = Config.Stock.get_headers(access_token, app_key, app_secret)
     params = Config.Stock.get_params(div_code, itm_no)
