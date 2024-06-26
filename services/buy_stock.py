@@ -45,6 +45,10 @@ def buy_stock(access_token, app_key, app_secret, ORD_UNPR, itm_no="005930", qty=
         "ORD_UNPR": ORD_UNPR  # 매수 가격 (0일 경우 시장가 주문)
     }
 
+    # hashkey = get_hashkey(app_key, app_secret, data)
+    # log_manager.logger.debug(hashkey)
+    # headers = Config.Buy.get_headers_hash(access_token, app_key, app_secret, hashkey)
+
     res = requests.post(url, headers=headers, data=json.dumps(data))
 
     log_manager.logger.debug(f"Status Code: {res.status_code}")

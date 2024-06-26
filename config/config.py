@@ -71,6 +71,17 @@ class Config:
                 "appsecret": app_secret,
                 "tr_id": "VTTC0802U"
             }
+        
+        @classmethod
+        def get_headers_hash(cls, access_token, app_key, app_secret, hashkey):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": f"Bearer {access_token}",
+                "appkey": app_key,
+                "appsecret": app_secret,
+                "tr_id": "VTTC0802U",
+                'hashkey': hashkey
+            }
 
         @classmethod
         def get_path(cls):

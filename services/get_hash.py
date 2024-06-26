@@ -36,14 +36,15 @@ def get_hashkey(app_key, app_secret, datas):
     if response.status_code == 200:
         try:
             hash_data = response.json()
+            log_manager.logger.debug(hash_data)
             return hash_data.get('HASH', None)
         except json.JSONDecodeError as e:
-            print("Failed to parse JSON response")
-            print(e)
+            log_manager.logger.error("Failed to parse JSON response")
+            log_manager.logger.error(e)
             return None
     else:
-        print(f"Failed to retrieve hashkey: {response.status_code}")
-        print(response.text)
+        log_manager.logger.error(f"Failed to retrieve hashkey: {response.status_code}")
+        log_manager.logger.error(response.text)
         return None
 
 if __name__ == "__main__":
