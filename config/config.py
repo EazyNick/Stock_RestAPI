@@ -102,6 +102,36 @@ class Config:
         @classmethod
         def get_path(cls):
             return "sell/tokenP"
+
+    class get_account:
+        @classmethod
+        def get_url(cls):
+            return f"{Config.Base.get_url_base()}/uapi/domestic-stock/v1/trading/inquire-balance"
+
+        @classmethod
+        def get_headers(cls, access_token, app_key, app_secret):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": f"Bearer {access_token}",
+                "appkey": app_key,
+                "appsecret": app_secret,
+                "tr_id": "VTTC8434R"
+            }
+
+        @classmethod
+        def get_path(cls):
+            return "buy/tokenP"
+        
+    class OAuth:
+        @classmethod
+        def get_url(cls):
+            return f"{Config.Base.get_url_base()}/oauth2/Approval"
+
+        @classmethod
+        def get_headers(cls):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+            }
         
         @staticmethod
         def body(app_key, app_secret):
@@ -110,20 +140,35 @@ class Config:
                 "appkey": app_key,
                 "appsecret": app_secret
             }
-
-    class OAuth:
+        
+    class OAuth_Revoke:
         @classmethod
         def get_url(cls):
-            return f"{Config.Base.get_url_base()}/{Config.Base.get_path()}"
+            return f"{Config.Base.get_url_base()}/oauth2/revokeP"
 
         @classmethod
         def get_headers(cls):
-            return Config.Base.get_headers()
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+            }
         
         @staticmethod
-        def body(app_key, app_secret):
+        def body(app_key, app_secret, access_token):
             return {
-                "grant_type": "client_credentials",
+                "appkey": app_key,
+                "appsecret": app_secret,
+                "token": access_token
+            }
+        
+    class Hash:
+        @classmethod
+        def get_url(cls):
+            return f"https://openapi.koreainvestment.com:9443/uapi/hashkey"
+
+        @classmethod
+        def get_headers(cls, app_key, app_secret):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
                 "appkey": app_key,
                 "appsecret": app_secret
             }

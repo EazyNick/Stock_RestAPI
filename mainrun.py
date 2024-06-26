@@ -67,6 +67,15 @@ def Run():
     #     log_manager.logger.info(f"주식 매도: {sell_data}")
     # else:
     #     log_manager.logger.error(f"매도 실패")
+        
+    account = get_account_balance(access_token, app_key, app_secret)
+
+    if account:
+        log_manager.logger.info(f"계좌 현황: {account}")
+    else:
+        log_manager.logger.error(f"계좌 조회 실패")
+        
+
 
 
 if __name__ == "__main__":

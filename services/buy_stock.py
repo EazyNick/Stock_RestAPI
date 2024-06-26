@@ -46,7 +46,7 @@ def buy_stock(access_token, app_key, app_secret, ORD_UNPR, itm_no="005930", qty=
     }
 
     res = requests.post(url, headers=headers, data=json.dumps(data))
-    
+
     log_manager.logger.debug(f"Status Code: {res.status_code}")
     log_manager.logger.debug(f"Response: {res.text}")
 
@@ -68,6 +68,6 @@ if __name__ == "__main__":
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
-    result = buy_stock(access_token, app_key, app_secret)
+    result = buy_stock(access_token, app_key, app_secret, '90000')
     print(result)
 

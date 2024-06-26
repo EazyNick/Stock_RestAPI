@@ -6,9 +6,13 @@ try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
     from config.config import Config
     from utils import *
+    from Auth import *
+    from services import *
 except ImportError:    
-    from config import Config
+    from config.config import Config
     from utils import *
+    from Auth import *
+    from services import *
 
 def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     """
@@ -45,3 +49,12 @@ def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
         return None
     except:
         log_manager.logger.error(f"{data}")
+
+if __name__ == "__main__":
+    manager = AccessTokenManager()
+    access_token = manager.load_access_token()
+    key = KeyringManager()
+    app_key = key.app_key
+    app_secret = key.app_secret_key
+    result = get_price(access_token, app_key, app_secret)
+    print(result)
