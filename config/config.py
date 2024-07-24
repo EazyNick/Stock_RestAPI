@@ -1,4 +1,6 @@
-# config/config.py
+"""
+Config 파일, url, header, path 등 설정 파일
+"""
 
 class Config:   
     class Base:

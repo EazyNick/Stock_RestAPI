@@ -56,7 +56,7 @@ def get_account_balance(access_token, app_key, app_secret):
         data = res.json()
         # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
         if data['rt_cd'] == '0':
-            log_manager.logger.info("Stock sale successful")
+            log_manager.logger.info("Account successful")
             return data
         else:
             log_manager.logger.error("Failed to sell stock")

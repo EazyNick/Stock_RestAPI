@@ -8,6 +8,7 @@ try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
     from config.config import Config
     from utils import *
+    from services import get_account_balance
 except ImportError:    
     from config import Config
     from utils import *
@@ -77,9 +78,52 @@ class AccessTokenManager:
         try:
             with open(self.file_path, 'r') as json_file:
                 data = json.load(json_file)
-                return data.get("access_token")
+                access_token = data.get("access_token")
+                # 토큰 유효성 검사
+                if self.validate_token(access_token):
+                    return access_token
+                else:
+                    log_manager.logger.error("Invalid access token, fetching a new one.")
+                    return self.get_access_token()
         except FileNotFoundError:
-            return None
+            return self.get_access_token()
+
+    def validate_token(self, token):
+        """
+        액세스 토큰의 유효성을 검사하는 함수
+        """
+        access_token = token
+        key = KeyringManager()
+        app_key = key.app_key
+        app_secret = key.app_secret_key
+        
+        try:
+            url = Config.get_account.get_url()
+            headers = Config.get_account.get_headers(access_token, app_key, app_secret)
+            cano = Config.Base.get_CANO()
+            acnt_prdt_cd = Config.Base.get_ACNT_PRDT_CD()
+
+            params = {
+                "CANO": cano,  # 종합계좌번호 (체계 8-2의 앞 8자리)
+                "ACNT_PRDT_CD": acnt_prdt_cd,  # 계좌상품코드 (체계 8-2의 뒤 2자리)
+                "AFHR_FLPR_YN": 'N', # 시간외단일가여부
+                "OFL_YN": '', # 오프라인여부
+                "INQR_DVSN": '02', # 조회구분, 	01 : 대출일별, 02 : 종목별
+                'UNPR_DVSN': '01', # 단가구분
+                'FUND_STTL_ICLD_YN': 'N', # 펀드결제분포함여부
+                'FNCG_AMT_AUTO_RDPT_YN': 'N', # 융자금액자동상환여부
+                'PRCS_DVSN': '00', # 처리구분 00 : 전일매매포함, 01 : 전일매매미포함
+                "CTX_AREA_FK100": '',  # 연속조회검색조건 100
+                "CTX_AREA_NK100": '' # 연속조회키 100
+            }
+
+            response = requests.get(url, headers=headers, params=params)
+            log_manager.logger.info(f"Token validation response status code: {response.status_code}")
+            # log_manager.logger.debug(f"Token validation response: {response.text}")
+            return response.status_code == 200
+        except Exception as e:
+            log_manager.logger.error(f"Token validation error: {e}")
+            return False
 
 # 테스트 코드
 if __name__ == "__main__":

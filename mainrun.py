@@ -41,7 +41,7 @@ def get_access_token(manager):
 
 def Run():
     log_manager.logger.info("Start MainRun")
-    print("Running...")
+    log_manager.logger.info("Running...")
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
@@ -68,16 +68,16 @@ def Run():
     # else:
     #     log_manager.logger.error(f"매도 실패")
         
+    time.sleep(3) # 계좌 조회로 token을 검증하기 때문에, 딜레이 필요
+    
     account = get_account_balance(access_token, app_key, app_secret)
 
     if account:
-        log_manager.logger.info(f"계좌 현황: {account}")
+        pass
+        # log_manager.logger.info(f"계좌 현황: {account}")
     else:
         log_manager.logger.error(f"계좌 조회 실패")
         
-
-
-
 if __name__ == "__main__":
     for i in range(10):
         Run()
