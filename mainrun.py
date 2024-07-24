@@ -49,7 +49,7 @@ def Run():
     manager = AccessTokenManager()
     access_token = get_access_token(manager)
 
-    stck_prpr = get_price(access_token, app_key, app_secret)
+    stck_prpr = get_current_price_volume(access_token, app_key, app_secret)
     if stck_prpr:
         log_manager.logger.info(f"현재가: {stck_prpr}")
     else:

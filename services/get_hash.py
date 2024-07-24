@@ -53,6 +53,6 @@ if __name__ == "__main__":
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
-    datas = get_price(access_token, app_key, app_secret)
+    datas = get_current_price_volume(access_token, app_key, app_secret)
     result = get_hashkey(app_key, app_secret, datas)
     print(result)

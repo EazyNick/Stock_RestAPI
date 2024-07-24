@@ -1,6 +1,7 @@
 import requests
 import sys
 import os
+from datetime import datetime
 
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -14,9 +15,9 @@ except ImportError:
     from Auth import *
     from services import *
 
-def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
+def get_current_price_volume(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     """
-    주식 API를 호출하여 현재가를 가져오는 함수
+    주식 API를 호출하여 현재가 및 현재 거래량을 가져오는 함수
 
     Args:
         access_token (str): 액세스 토큰
@@ -26,9 +27,8 @@ def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
         itm_no (str): 종목번호 (기본값: "005930")
 
     Returns:
-        str: 현재가 (주식 가격) 또는 None
+        dict: 현재가 및 현재 거래량을 포함하는 딕셔너리
     """
-    
     url = Config.Stock.get_url()
     headers = Config.Stock.get_headers(access_token, app_key, app_secret)
     params = Config.Stock.get_params(div_code, itm_no)
@@ -37,18 +37,29 @@ def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     try:
         if res.status_code == 200:
             data = res.json()
-            # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
-            stck_prpr = data['output'].get('stck_prpr')
-            if stck_prpr:
-                log_manager.logger.info(f"현재가: {stck_prpr}")
-                return stck_prpr
-            else:
-                log_manager.logger.error("Failed to retrieve 현재가: 'stck_prpr' not found in response.")
+            log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
+            
+            # 필요한 데이터 추출
+            stck_prpr = float(data['output'].get('stck_prpr', 0))
+            acml_vol = float(data['output'].get('acml_vol', 0))
+            
+            # 현재 날짜
+            date_str = datetime.now().strftime('%Y-%m-%d')
+
+            result = {
+                'Date': date_str,
+                'Close': stck_prpr,
+                'Volume': acml_vol
+            }
+            
+            log_manager.logger.info(f"현재가 및 거래량: {result}")
+            return result
         else:
             log_manager.logger.error(f"Failed to retrieve stock data: {res.status_code}")
+            return None
+    except Exception as e:
+        log_manager.logger.error(f"Exception occurred: {e}")
         return None
-    except:
-        log_manager.logger.error(f"{data}")
 
 if __name__ == "__main__":
     manager = AccessTokenManager()
@@ -56,5 +67,6 @@ if __name__ == "__main__":
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
-    result = get_price(access_token, app_key, app_secret)
+    
+    result = get_current_price_volume(access_token, app_key, app_secret)
     print(result)
