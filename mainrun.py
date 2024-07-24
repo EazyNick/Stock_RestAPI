@@ -49,9 +49,9 @@ def Run():
     manager = AccessTokenManager()
     access_token = get_access_token(manager)
 
-    stck_prpr = get_current_price_volume(access_token, app_key, app_secret)
-    if stck_prpr:
-        log_manager.logger.info(f"현재가: {stck_prpr}")
+    stock_data = get_current_price_volume(access_token, app_key, app_secret)
+    if stock_data:
+        log_manager.logger.info(f"현재가, 거래량: {stock_data}")
     else:
         log_manager.logger.error(f"현재가 불러오기 실패")
 
