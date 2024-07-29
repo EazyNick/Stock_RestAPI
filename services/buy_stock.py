@@ -57,11 +57,14 @@ def buy_stock(access_token, app_key, app_secret, ORD_UNPR, itm_no="005930", qty=
     if res.status_code == 200:
         data = res.json()
         # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
-        if data['rt_cd'] == '0':
-            log_manager.logger.info("Stock purchase successful")
-            return data
-        else:
-            log_manager.logger.error("Failed to purchase stock: " + data['msg'])
+        try:
+            if data['rt_cd'] == '0':
+                log_manager.logger.info("Stock purchase successful")
+                return data
+            else:
+                log_manager.logger.error("Failed to purchase stock: " + data.get('msg', 'No message provided'))
+        except KeyError as e:
+            log_manager.logger.error(f"KeyError occurred: {e} - Data received: {data}")
     else:
         log_manager.logger.error(f"Failed to purchase stock: {res.status_code}")
     return None 

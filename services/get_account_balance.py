@@ -8,11 +8,13 @@ try:
     from utils import *
     from Auth import *
     from services import *
+    from config import *
 except ImportError:    
     from config.config import Config
     from utils import *
     from Auth import *
     from services import *
+    from config import *
 
 def get_account_balance(access_token, app_key, app_secret):
     """
@@ -24,7 +26,7 @@ def get_account_balance(access_token, app_key, app_secret):
         app_secret (str): 애플리케이션 시크릿 키
 
     Returns:
-        dict: 계좌 조회 결과 또는 None
+        tuple: (stock_info_list, account_info) 또는 None
     """
     
     url = Config.get_account.get_url()
@@ -48,27 +50,38 @@ def get_account_balance(access_token, app_key, app_secret):
 
     res = requests.get(url, headers=headers, params=params)
     
-    log_manager.logger.debug(f"Status Code: {res.status_code}")
-    log_manager.logger.debug(f"Response Headers: {res.headers}")
-    log_manager.logger.debug(f"Response Text: {res.text}")
+    # log_manager.logger.info(f"Status Code: {res.status_code}")
+    # log_manager.logger.info(f"Response Headers: {res.headers}")
+    # log_manager.logger.info(f"Response Text: {res.text}")
 
     if res.status_code == 200:
         data = res.json()
         # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
         if data['rt_cd'] == '0':
             log_manager.logger.info("Account successful")
-            return data
+            stock_info_list, account_info = AccountInfo.from_data(data)
+            return stock_info_list, account_info
         else:
-            log_manager.logger.error("Failed to sell stock")
+            log_manager.logger.error("Failed to load Account")
     else:
         log_manager.logger.error(f"Failed to sell stock: {res.status_code}")
-    return None
+    return None, None
 
 if __name__ == "__main__":
     manager = AccessTokenManager()
     access_token = manager.load_access_token()
+    if access_token is None:
+        access_token = manager.get_access_token()
+    # log_manager.logger.debug(access_token)
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
-    result = get_account_balance(access_token, app_key, app_secret)
-    print(result)
+    stock_info_list, account_info = get_account_balance(access_token, app_key, app_secret)
+    log_manager.logger.debug(f"stock_info_list: {stock_info_list}, account_info: {account_info}")
+    
+    if stock_info_list is not None and account_info is not None:
+        formatter = AccountFormatter()
+        formatter.format(stock_info_list, account_info)
+    else:
+        log_manager.logger.error("Failed to retrieve account information")
+    # print(result)
